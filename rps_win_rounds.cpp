@@ -24,14 +24,17 @@ int main()
     unsigned short p, q, r;
     long n, a, b, x = 0, y = 0, rc = 0, src = 0;
     int xwc = 0, ywc = 0, tc = 100000;
-    cin >> p >> q >> r;
-    cin >> n >> a >> b;
+
+    // cin >> p >> q >> r;
+    // cin >> n >> a >> b;
+    p = 1, q = 1, r = 1, a = 2, b = 1;
+    cin >> n;
     
     string fileRounds;
 
-    fileRounds = "./rounds/" + to_string(p) + " " + to_string(q) + " " + to_string(r) + " " + to_string(n) + " " + to_string(a) + " " + to_string(b) + ".txt";
+    fileRounds = "";
 
-    ofstream file1(fileRounds, ios::app);  // Open a file to append src values
+    ofstream file1("round_data.csv", ios::app);  // Open a file to append src values
 
     for (long long i = 0; i < tc; i++)
     {
@@ -54,7 +57,7 @@ int main()
         
             if (x >= n || y >= n)
             {
-                file1 << src << "\n";  // Write src to file before resetting
+                file1 << n << "," << src << "\n";  // Write src to file before resetting
                 xwc += x >= n ? 1 : 0;
                 ywc += y >= n ? 1 : 0;
                 x = 0; y = 0; src = 0;

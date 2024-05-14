@@ -1,33 +1,55 @@
-import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import statsmodels.api as sm
 
-# Step 1: Load data from a file
 def load_data(file_path):
-    with open(file_path, 'r') as file:
-        data = file.read().splitlines()
-    return [float(x) for x in data]
+    data = pd.read_csv(file_path)
+    return data
 
-# Example usage with a hypothetical 'data.txt' file
-data = load_data('/Users/devngj/Desktop/Projects/rps/1 1 1 200 2 1.txt')
+def plot_combined_chart(data):
+    # Group data by 'n' for the candlestick chart
+    grouped = data.groupby('n')['rounds']
+    summary = grouped.agg(
+        min='min',
+        q1=lambda x: x.quantile(0.25),
+        median='median',
+        q3=lambda x: x.quantile(0.75),
+        max='max'
+    ).reset_index()
+    stats_data = grouped.agg(
+        mean='mean',
+        median='median',
+        mode=lambda x: x.mode().iloc[0]
+    ).reset_index()
+    
+    # Initialize the plot
+    fig, ax = plt.subplots(figsize=(12, 8))
 
-# Step 2: Determine the range of the data
-min_value = min(data)
-max_value = max(data)
+    # Candlestick plot
+    # Plotting the box for interquartile range
+    ax.bar(summary['n'], summary['q3'] - summary['q1'], bottom=summary['q1'], width=8, color='skyblue', edgecolor='black')
+    # Lines for max and min
+    ax.vlines(summary['n'], summary['min'], summary['max'], color='black', linewidth=1.5)
 
-# Step 3: Create bins from min to max with a step of 5
-bins = np.arange(min_value, max_value + 5, 5)  # Add 5 to include the max value in the range
+    # Regression plots on the same axis
+    sns.regplot(x='n', y='mean', data=stats_data, ax=ax, label='Mean Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"red", "linewidth": 1.5})
+    sns.regplot(x='n', y='median', data=stats_data, ax=ax, label='Median Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"green", "linewidth": 1.5})
+    sns.regplot(x='n', y='mode', data=stats_data, ax=ax, label='Mode Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"blue", "linewidth": 1.5})
+    
+    # Setting labels and titles
+    ax.set_xlabel('n')
+    ax.set_ylabel('Rounds')
+    ax.set_title('Combined Candlestick and Regression Analysis for Rounds per N')
+    
+    # Legend and grid
+    ax.legend()
+    ax.grid(True)
 
-# Step 4: Plot the histogram
-plt.hist(data, bins=bins, edgecolor='black', rwidth=0.8)
+    plt.show()
 
-# Set x-axis labels to show ranges
-# plt.xticks([(a + b) / 2 for a, b in zip(bins[:-1], bins[1:])], [f'{int(a)}~{int(b-1)}' for a, b in zip(bins[:-1], bins[1:])])
-
-# Adding labels and title
-plt.xlabel('Rounds Needed for Win')
-plt.ylabel('Frequency')
-plt.title('1 1 1 200 2 1')
-
-# Show plot
-plt.show()
-
+# Sample usage with commented execution
+data = load_data('round_data.csv')
+plot_combined_chart(data)
