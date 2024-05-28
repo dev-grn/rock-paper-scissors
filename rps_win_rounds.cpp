@@ -28,13 +28,12 @@ int main()
     // cin >> p >> q >> r;
     // cin >> n >> a >> b;
     p = 1, q = 1, r = 1, a = 2, b = 1;
-    cin >> n;
-    
-    string fileRounds;
 
-    fileRounds = "";
+    ofstream file1("round_data_100_1000_10.csv", ios::app);  // Open a file to append src values
 
-    ofstream file1("round_data.csv", ios::app);  // Open a file to append src values
+    for (n = 100; n <= 1000; n += 10){
+
+    // cin >> n;
 
     for (long long i = 0; i < tc; i++)
     {
@@ -66,6 +65,9 @@ int main()
         }
     }
 
+    // cout << xwc << " " << ywc << " " << (long double) rc / tc;
+
+    }
     file1.close();  // Close the file
-    cout << xwc << " " << ywc << " " << (long double) rc / tc;
+    return 0;
 }

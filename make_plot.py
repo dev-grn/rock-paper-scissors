@@ -30,14 +30,14 @@ def plot_combined_chart(data):
 
     # Candlestick plot
     # Plotting the box for interquartile range
-    ax.bar(summary['n'], summary['q3'] - summary['q1'], bottom=summary['q1'], width=8, color='skyblue', edgecolor='black')
+    # ax.bar(summary['n'], summary['q3'] - summary['q1'], bottom=summary['q1'], width=3, color='skyblue', edgecolor='black')
     # Lines for max and min
-    ax.vlines(summary['n'], summary['min'], summary['max'], color='black', linewidth=1.5)
+    # ax.vlines(summary['n'], summary['min'], summary['max'], color='black', linewidth=1.5)
 
     # Regression plots on the same axis
-    sns.regplot(x='n', y='mean', data=stats_data, ax=ax, label='Mean Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"red", "linewidth": 1.5})
-    sns.regplot(x='n', y='median', data=stats_data, ax=ax, label='Median Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"green", "linewidth": 1.5})
-    sns.regplot(x='n', y='mode', data=stats_data, ax=ax, label='Mode Regression', ci=None, scatter_kws={"s": 80}, line_kws={"color":"blue", "linewidth": 1.5})
+    sns.regplot(x='n', y='mean', data=stats_data, ax=ax, label='Mean Regression', ci=None, scatter_kws={"s": 10}, line_kws={"color":"red", "linewidth": 1.5})
+    sns.regplot(x='n', y='median', data=stats_data, ax=ax, label='Median Regression', ci=None, scatter_kws={"s": 10}, line_kws={"color":"green", "linewidth": 1.5})
+    sns.regplot(x='n', y='mode', data=stats_data, ax=ax, label='Mode Regression', ci=None, scatter_kws={"s": 10}, line_kws={"color":"blue", "linewidth": 1.5})
     
     # Setting labels and titles
     ax.set_xlabel('n')
@@ -51,5 +51,5 @@ def plot_combined_chart(data):
     plt.show()
 
 # Sample usage with commented execution
-data = load_data('round_data.csv')
+data = load_data('round_data_1_100_1.csv')
 plot_combined_chart(data)
